@@ -1,30 +1,50 @@
 import axios from "axios";
 
 const roomApi = axios.create({
-  baseURL: 'http://localhost:8082/api/room'
+  baseURL: "http://localhost:8082/api/room",
 });
 
-const addNewRoom = async (photo: Blob | string, roomType: string, roomPrice: string) => {
+const addNewRoom = async (
+  photo: Blob | string,
+  roomType: string,
+  roomPrice: string
+) => {
+  console.log("Calling the new room api");
   const formData = new FormData();
   formData.append("photo", photo);
   formData.append("roomType", roomType);
   formData.append("roomPrice", roomPrice);
 
-  const res = await roomApi.post('', formData);
-  console.log(res.data)
-  if (res.status === 201) 
-    return true
-   else 
-    return false;
-}
+  try {
+    const res = await roomApi.post("", formData);
+    if (res.status === 201) return true;
+    else return false;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error adding new room");
+  }
+};
 
 const getRoomTypes = async () => {
+  console.log("Calling the get room type api");
   try {
-    const res = await roomApi.get('/types');
+    const res = await roomApi.get("/types");
     return res.data;
   } catch (error) {
-    throw new Error("Error fetching room types")
+    console.error(error);
+    throw new Error("Error fetching room types");
   }
-}
+};
 
-export {addNewRoom, getRoomTypes}
+const getAllRooms = async () => {
+  console.log("calling the all rooms api");
+  try {
+    const res = await roomApi.get("");
+    return res.data;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error Fetching rooms");
+  }
+};
+
+export { addNewRoom, getRoomTypes, getAllRooms };
