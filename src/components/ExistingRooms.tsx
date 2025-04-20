@@ -4,7 +4,7 @@ import { deleteRoom, getAllRooms } from "../apis/roomApi";
 import { Col } from "react-bootstrap";
 import RoomFilter from "./RoomFilter";
 import RoomPagination from "./RoomPagination";
-import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const ExistingRooms = () => {
@@ -81,8 +81,12 @@ const ExistingRooms = () => {
           {error && <p>{error}</p>}
           {success && <p>{success}</p>}
           <section className="mt-5 mb-5 container">
-            <div className="d-flex justify-content-center mb-3 mt-5">
+            <div className="d-flex justify-content-between align-items-center mb-3 mt-5">
               <h2>Existing Rooms</h2>
+              <Link to="/add-room">
+                <FaPlus className="me-2" />
+                Add Room
+              </Link>
             </div>
             <Col md={6} className="mb-3 mb-md-0">
               <RoomFilter rooms={rooms} setFilteredData={setFilteredRooms} />
