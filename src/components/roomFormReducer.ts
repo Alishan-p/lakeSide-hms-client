@@ -3,13 +3,14 @@ export type RoomFormState = {
   roomType: string;
   roomPrice: number;
   imagePreview: string;
-}
+};
 
 export type RoomFormAction =
   | { type: "SET_PHOTO"; payload: Blob }
   | { type: "SET_ROOM_TYPE"; payload: string }
   | { type: "SET_ROOM_PRICE"; payload: number }
   | { type: "SET_IMAGE_PREVIEW"; payload: string }
+  | { type: "POPULATE_FORM"; payload: RoomFormState }
   | { type: "RESET" };
 
 export const initialRoomFormState: RoomFormState = {
@@ -19,7 +20,10 @@ export const initialRoomFormState: RoomFormState = {
   imagePreview: "",
 };
 
-export function roomFormReducer(state: RoomFormState, action: RoomFormAction): RoomFormState {
+export function roomFormReducer(
+  state: RoomFormState,
+  action: RoomFormAction
+): RoomFormState {
   switch (action.type) {
     case "SET_PHOTO":
       return { ...state, photo: action.payload };
@@ -31,6 +35,8 @@ export function roomFormReducer(state: RoomFormState, action: RoomFormAction): R
       return { ...state, imagePreview: action.payload };
     case "RESET":
       return initialRoomFormState;
+    case "POPULATE_FORM":
+      return { ...state, ...action.payload };
     default:
       return state;
   }
