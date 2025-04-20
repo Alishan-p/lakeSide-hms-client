@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Room } from "../types/Room";
 
 const roomApi = axios.create({
   baseURL: "http://localhost:8082/api/room",
@@ -25,7 +26,7 @@ const addNewRoom = async (
   }
 };
 
-const getRoomTypes = async () => {
+const getRoomTypes = async (): Promise<string[]> => {
   console.log("Calling the get room type api");
   try {
     const res = await roomApi.get("/types");
@@ -36,7 +37,7 @@ const getRoomTypes = async () => {
   }
 };
 
-const getAllRooms = async () => {
+const getAllRooms = async (): Promise<Room[]> => {
   console.log("calling the all rooms api");
   try {
     const res = await roomApi.get("");
@@ -59,4 +60,40 @@ const deleteRoom = async (id: number) => {
   }
 };
 
-export { addNewRoom, getRoomTypes, getAllRooms, deleteRoom };
+const updateRoom = async (id: number, data: Room) => {
+  console.log("calling the update api");
+  const formData = new FormData();
+  formData.append("roomType", data.roomType);
+  formData.append("roomPrice", data.roomPrice.toString());
+  formData.append("photo", data.photo || "");
+
+  try {
+    const res = await roomApi.put(`/${id}`, formData);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error)
+      throw new Error("Error deleting rooms " + error.message);
+  }
+};
+
+const getRoomById = async (id: number): Promise<Room | undefined> => {
+  console.log("calling the fetch room by id api");
+  try {
+    const res = await roomApi.get(`/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error)
+      throw new Error("Error fetching room by id" + error.message);
+  }
+};
+
+export {
+  addNewRoom,
+  getRoomTypes,
+  getAllRooms,
+  deleteRoom,
+  updateRoom,
+  getRoomById,
+};
