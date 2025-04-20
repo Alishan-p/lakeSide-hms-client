@@ -47,4 +47,16 @@ const getAllRooms = async () => {
   }
 };
 
-export { addNewRoom, getRoomTypes, getAllRooms };
+const deleteRoom = async (id: number) => {
+  console.log("calling the delete api");
+  try {
+    const res = await roomApi.delete(`/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error)
+      throw new Error("Error deleting rooms " + error.message);
+  }
+};
+
+export { addNewRoom, getRoomTypes, getAllRooms, deleteRoom };

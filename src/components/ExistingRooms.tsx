@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Room } from "../types/Room";
-import { getAllRooms } from "../apis/roomApi";
+import { deleteRoom, getAllRooms } from "../apis/roomApi";
 import { Col } from "react-bootstrap";
 import RoomFilter from "./RoomFilter";
 import RoomPagination from "./RoomPagination";
+import { FaTrashAlt } from "react-icons/fa";
 
 const ExistingRooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -14,6 +15,7 @@ const ExistingRooms = () => {
   const [selectedRoomType] = useState("");
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchRooms();
@@ -57,13 +59,26 @@ const ExistingRooms = () => {
   const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
   const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
 
+  const handleRoomDelete = async (id: number) => {
+    try {
+      const res = await deleteRoom(id);
+      if (res === "") {
+        setSuccess(`Room with id:${id} is deleted.`);
+        fetchRooms();
+      }
+    } catch (error) {
+      if (error instanceof Error) setError(error.message);
+    }
+  };
+
   return (
     <div>
       {isLoading ? (
         <p>Loading existing rooms</p>
       ) : (
         <>
-          ({error && <p>{error}</p>})
+          {error && <p>{error}</p>}
+          {success && <p>{success}</p>}
           <section className="mt-5 mb-5 container">
             <div className="d-flex justify-content-center mb-3 mt-5">
               <h2>Existing Rooms</h2>
@@ -87,8 +102,15 @@ const ExistingRooms = () => {
                     <td>{room.roomPrice}</td>
                     <td>{room.roomType}</td>
                     <td>
-                      <button>View / Edit</button>
-                      <button>Delete</button>
+                      <button className="btn btn-outline-primary me-3">
+                        View / Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleRoomDelete(room.id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
                     </td>
                   </tr>
                 ))}
