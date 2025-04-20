@@ -60,7 +60,7 @@ const deleteRoom = async (id: number) => {
   }
 };
 
-const updateRoom = async (id: number, data: Room) => {
+const updateRoom = async (id: number, data: Omit<Room, "isBooked" | "id">) => {
   console.log("calling the update api");
   const formData = new FormData();
   formData.append("roomType", data.roomType);
