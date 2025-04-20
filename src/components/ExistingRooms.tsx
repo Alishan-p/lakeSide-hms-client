@@ -4,7 +4,8 @@ import { deleteRoom, getAllRooms } from "../apis/roomApi";
 import { Col } from "react-bootstrap";
 import RoomFilter from "./RoomFilter";
 import RoomPagination from "./RoomPagination";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const ExistingRooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -101,10 +102,15 @@ const ExistingRooms = () => {
                     <td>{room.id}</td>
                     <td>{room.roomPrice}</td>
                     <td>{room.roomType}</td>
-                    <td>
-                      <button className="btn btn-outline-primary me-3">
-                        View / Edit
-                      </button>
+                    <td className="gap-2">
+                      <Link to={`/edit-room/${room.id}`}>
+                        <span className="btn btn-info btn-sm me-2">
+                          <FaEye />
+                        </span>
+                        <span className="btn btn-warning btn-sm me-2">
+                          <FaEdit />{" "}
+                        </span>
+                      </Link>
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => handleRoomDelete(room.id)}
