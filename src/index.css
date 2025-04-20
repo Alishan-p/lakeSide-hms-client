@@ -1,3 +1,5 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
 body {
   min-height: 100vh;
   padding-bottom: 50px;
@@ -25,12 +27,12 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  content: '';
+  content: "";
   background-color: rgb(169, 77, 123);
   width: 0;
   margin: 0 auto;
   height: 4px;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .navbar .navbar-nav .nav-item:hover::after {
@@ -71,7 +73,6 @@ body {
   transition: 0.7s;
   outline-color: transparent;
   outline-style: solid;
-
 }
 
 .hotel-color {
@@ -80,16 +81,14 @@ body {
 
 .room-price {
   color: darkgoldenrod;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: medium;
 }
 
 .vertical-rule {
-  border-left: '0.5px solid black';
-  height: '100vh'
+  border-left: "0.5px solid black";
+  height: "100vh";
 }
-
-
 
 .parallax {
   background-image: url("./assets/images/parrall.jpg");
@@ -135,25 +134,24 @@ h2 {
 }
 
 @keyframes bounceIn {
-
   from,
   20%,
   40%,
   60%,
   80%,
   to {
-    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     transform: translate3d(0, 0, 0);
   }
 
   40%,
   60% {
-    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
     transform: translate3d(0, -30px, 0);
   }
 
   70% {
-    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
     transform: translate3d(0, -15px, 0);
   }
 
