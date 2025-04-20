@@ -1,12 +1,15 @@
-import AddRoom from "./components/AddRoom";
 import ExistingRooms from "./components/ExistingRooms";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
-    <>
-      <AddRoom />
-      <ExistingRooms />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" Component={HomePage} />
+        <Route path="/rooms" Component={ExistingRooms} />
+      </Routes>
+    </Router>
   );
 }
 
