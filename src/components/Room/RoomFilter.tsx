@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { Room } from "../types/Room";
+import { Room } from "../../types/Room";
 
 interface RoomFilterProps {
   rooms: Room[];

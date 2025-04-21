@@ -1,5 +1,5 @@
 import { Card, Col } from "react-bootstrap";
-import { Room } from "../types/Room";
+import { Room } from "../../types/Room";
 import { Link } from "react-router-dom";
 interface RoomCardProps {
   room: Room;

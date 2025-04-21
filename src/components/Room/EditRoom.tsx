@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useReducer, useRef } from "react";
-import { addNewRoom } from "../apis/roomApi";
-import RoomTypeSelector from "./RoomTypeSelector";
 import { initialRoomFormState, roomFormReducer } from "./roomFormReducer";
-import { initialToastState, toastReducer } from "./useToastReducer";
-import { Link } from "react-router-dom";
+import { toastReducer, initialToastState } from "../useToastReducer";
+import { Link, Navigate, useParams } from "react-router-dom";
+import { getRoomById, updateRoom } from "../../apis/roomApi";
+import RoomTypeSelector from "./RoomTypeSelector";
 
-const AddRoom = () => {
+const EditRoom = () => {
   const [formState, formDispatch] = useReducer(
     roomFormReducer,
     initialRoomFormState
@@ -16,6 +16,8 @@ const AddRoom = () => {
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { id } = useParams();
+
   useEffect(() => {
     if (toastState.show) {
       const timer = setTimeout(() => {
@@ -25,38 +27,37 @@ const AddRoom = () => {
     }
   }, [toastState.show]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!formState.photo) {
-      toastDispatch({ type: "SHOW_ERROR", payload: "Room photo is required" });
-      return;
-    }
+  useEffect(() => {
+    const fetchRoom = async () => {
+      if (id === undefined) return;
 
-    if (formState.roomType === "" || formState.roomType === "Add New") {
-      toastDispatch({ type: "SHOW_ERROR", payload: "Room type is required" });
-      return;
-    }
-
-    try {
-      const success = await addNewRoom(
-        formState.photo,
-        formState.roomType,
-        formState.roomPrice.toString()
-      );
-      if (success) {
-        toastDispatch({ type: "SHOW_SUCCESS", payload: "New room added" });
-        formDispatch({ type: "RESET" });
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-      } else {
-        toastDispatch({ type: "SHOW_ERROR", payload: "Something went wrong" });
+      const roomData = await getRoomById(parseInt(id));
+      if (roomData === undefined) {
+        toastDispatch({
+          type: "SHOW_ERROR",
+          payload: "Error fetching room details",
+        });
+        return;
       }
-    } catch (error) {
-      if (error instanceof Error)
-        toastDispatch({ type: "SHOW_ERROR", payload: error.message });
-    }
-  };
+
+      const { photo } = roomData;
+      let imagePreview = "";
+      if (typeof photo === "string") {
+        imagePreview = `data:image/jpeg;base64,${photo}`;
+      }
+
+      formDispatch({
+        type: "POPULATE_FORM",
+        payload: {
+          ...roomData,
+          imagePreview,
+          photo: null,
+        },
+      });
+    };
+
+    fetchRoom();
+  }, [id]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -77,6 +78,47 @@ const AddRoom = () => {
       type: "SET_IMAGE_PREVIEW",
       payload: URL.createObjectURL(file),
     });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!formState.photo) {
+      toastDispatch({
+        type: "SHOW_ERROR",
+        payload: "Room photo is required",
+      });
+      return;
+    }
+
+    if (formState.roomType === "" || formState.roomType === "Add New") {
+      toastDispatch({ type: "SHOW_ERROR", payload: "Room type is required" });
+      return;
+    }
+
+    if (id === undefined) {
+      toastDispatch({ type: "SHOW_ERROR", payload: "Room id is required" });
+      return;
+    }
+
+    try {
+      const success = await updateRoom(parseInt(id), { ...formState });
+      if (success) {
+        toastDispatch({ type: "SHOW_SUCCESS", payload: "room data edited" });
+        formDispatch({ type: "RESET" });
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        Navigate({ to: "/rooms" });
+      } else {
+        toastDispatch({
+          type: "SHOW_ERROR",
+          payload: "Something went wrong",
+        });
+      }
+    } catch (error) {
+      if (error instanceof Error)
+        toastDispatch({ type: "SHOW_ERROR", payload: error.message });
+    }
   };
 
   return (
@@ -156,16 +198,13 @@ const AddRoom = () => {
                   />
                 )}
               </div>
-              <div className="d-grid d-flex mt-2">
-                <button
-                  className="btn btn-outline-primary ml-5 me-2"
-                  type="submit"
-                >
-                  save room
-                </button>
+              <div className="d-grid gap-2 d-md-flex mt-2">
                 <Link to="/rooms" className="btn btn-outline-info ml-5">
-                  rooms
+                  back
                 </Link>
+                <button className="btn btn-outline-primary ml-5 " type="submit">
+                  Edit room
+                </button>
               </div>
             </form>
           </div>
@@ -175,4 +214,4 @@ const AddRoom = () => {
   );
 };
 
-export default AddRoom;
+export default EditRoom;

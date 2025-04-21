@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllRooms } from "../apis/roomApi";
-import { Room } from "../types/Room";
+import { getAllRooms } from "../../apis/roomApi";
+import { Room } from "../../types/Room";
 import RoomCard from "./RoomCard";
 import { Col, Container, Row } from "react-bootstrap";
 import RoomFilter from "./RoomFilter";

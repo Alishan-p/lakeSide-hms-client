@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Room } from "../types/Room";
-import { deleteRoom, getAllRooms } from "../apis/roomApi";
+import { Room } from "../../types/Room";
+import { deleteRoom, getAllRooms } from "../../apis/roomApi";
 import { Col } from "react-bootstrap";
 import RoomFilter from "./RoomFilter";
 import RoomPagination from "./RoomPagination";
