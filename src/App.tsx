@@ -5,6 +5,7 @@ import EditRoom from "./components/EditRoom";
 import AddRoom from "./components/AddRoom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import RoomListing from "./components/RoomListing";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/rooms" Component={ExistingRooms} />
           <Route path="/edit-room/:id" Component={EditRoom} />
           <Route path="/add-room" Component={AddRoom} />
+          <Route path="/allrooms" Component={RoomListing} />
         </Routes>
       </Router>
       <Footer />
